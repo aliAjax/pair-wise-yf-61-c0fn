@@ -1,4 +1,4 @@
-export type BatchStatus = 'draft' | 'approved' | 'running' | 'paused' | 'completed' | 'rolled_back';
+export type BatchStatus = 'draft' | 'approved' | 'running' | 'paused' | 'completed' | 'rolling_back' | 'rolled_back';
 
 export interface DeviceGroup {
   id: string;
@@ -7,6 +7,30 @@ export interface DeviceGroup {
   count: number;
   compatible: boolean;
   offlineGateways: number;
+}
+
+export interface FailureSnapshot {
+  id: string;
+  at: string;
+  reason: 'threshold' | 'manual';
+  downloaded: number;
+  failed: number;
+  failureRate: number;
+  threshold: number;
+  note: string;
+  noteBy: string;
+  noteAt: string;
+  reapprovedBy: string;
+  reapprovedAt: string;
+}
+
+export interface RollbackRecord {
+  targetVersion: string;
+  startedAt: string;
+  startedBy: string;
+  rolledBack: number;
+  failed: number;
+  finishedAt: string;
 }
 
 export interface ReleaseBatch {
@@ -22,6 +46,8 @@ export interface ReleaseBatch {
   downloaded: number;
   failed: number;
   updatedAt: string;
+  failureSnapshots: FailureSnapshot[];
+  rollback?: RollbackRecord;
 }
 
 export interface AuditEntry {
